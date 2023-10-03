@@ -9,3 +9,31 @@
 .harnessShadow {
   text-shadow: 2px 2px 2px #262626;
 }
+
+@keyframes colorChange {
+  0% {
+    color: white;
+  }
+  100%{
+    color: white;
+    text-shadow: 2px 2px 2px #262626;
+  }
+}
+
+.textChange{
+  animation: 1s 2.5s linear colorChange forwards;
+  color:white;
+}
+
+@keyframes opacityChange {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: .8;
+  }
+}
+
+.opacityChange {
+  animation: 1s 2.5s linear opacityChange forwards;
+}

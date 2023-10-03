@@ -63,19 +63,19 @@ export default function SignUp() {
     const [PasswordMatch, setPasswordMatch] = useState(0)
 
     const setFirstName = (e: { target: { value: string } }) => {
-        let tempObj = { ...UserInfo }
+        let tempObj = {...UserInfo}
         tempObj.first_name = e.target.value
         setUserInfo(tempObj)
     }
 
     const setEmail = (e: { target: { value: string } }) => {
-        let tempObj = { ...UserInfo }
+        let tempObj = {...UserInfo}
         tempObj.email = e.target.value
         setUserInfo(tempObj)
     }
 
     const setPassword = (e: { target: { value: string } }) => {
-        let tempObj = { ...UserInfo }
+        let tempObj = { ...UserInfo}
         tempObj.password = e.target.value
         setUserInfo(tempObj)
     }
@@ -400,7 +400,7 @@ export default function SignUp() {
     </form>
 
     return(
-        <>
+        <div className="w-full z-20 relative">
         {FormPage === 1 ? signUpOne() : null}
         {FormPage === 2 ? signUpTwo() : null}
         {FormPage === 3 ? signUpThree() : null}
@@ -415,6 +415,6 @@ export default function SignUp() {
           <div className={`w-4 h-4 rounded-full border-2 border-neutral-800 ${FormPage > 5 ? 'bg-neutral-800' : null} ${FormPage === 5 ? 'bg-white' : null}`}/>
           <div className={`w-4 h-4 rounded-full border-2 border-neutral-800 ${FormPage > 6 ? 'bg-neutral-800' : null} ${FormPage === 6 ? 'bg-white' : null}`}/>
         </div>
-        </>
+        </div>
     )
 }
