@@ -350,7 +350,7 @@ export default function SignUp() {
       </div>
       <div className="flex flex-wrap">
         {UserInfo.avoid_food.map(item => 
-          <div className="ml-3 mt-2 flex flex-row items-center">
+          <div key={item} className="ml-3 mt-2 flex flex-row items-center">
             <div className="text-amber-400 pb-[.05rem] text-2xl flex justify-center items-center">|</div>
             <p className="ml-3 text-2xl text-white font-light">{item}</p>
           </div>
