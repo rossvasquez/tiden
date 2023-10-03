@@ -7,7 +7,7 @@
 }
 
 .harnessShadow {
-  text-shadow: 2px 2px 2px #262626;
+  text-shadow: 3px 3px 3px #262626;
 }
 
 @keyframes colorChange {

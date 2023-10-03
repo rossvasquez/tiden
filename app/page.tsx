@@ -4,6 +4,8 @@ import { useState } from "react"
 
 import Image from "next/image"
 
+import { roboto, koulen } from "../assets/styles/fonts"
+
 import SignUp from "./homepage_components/signUp"
 
 import Lottie from "lottie-react"
@@ -52,10 +54,10 @@ export default function Home() {
       <div className="relative w-full h-full mx-auto">
         <div className="relative z-50 w-full h-24 bg-amber-400 shadow-lg p-4 flex justify-center items-center">
           <div className="relative max-w-[100rem] w-full h-full flex items-center">
-            <p className="absolute left-6 md:left-12 pb-1 text-4xl font-light text-neutral-800">Tiden</p>
-            <div className="flex flex-row gap-4 absolute right-4 md:right-12">
-              <div onClick={() => setLogInState(1)} className={` ${LogInState === 1 ? 'hidden' : null} group hover:border-2 hover:bg-amber-400 border-neutral-800 cursor-pointer flex justify-center items-center w-28 h-12 rounded-md bg-neutral-800`}>
-                <div className="text-white font-semibold group-hover:text-neutral-800">Log In</div>
+            <p className="absolute left-6 md:left-8 pb-1 text-4xl font-light text-neutral-800">Tiden</p>
+            <div className="flex flex-row gap-4 absolute right-4 md:right-8">
+              <div onClick={() => setLogInState(1)} className={` ${LogInState === 1 ? 'hidden' : null} group transition-all hover:scale-[105%] border-neutral-800 cursor-pointer flex justify-center items-center w-28 h-14 rounded-[4px] bg-neutral-800`}>
+                <div className={`text-white font-light text-lg ${roboto.className}`}>Log In</div>
               </div>
             </div>
           </div>
@@ -80,57 +82,60 @@ export default function Home() {
               className={`z-10 absolute bottom-0 ${LogInState === 2 ? '-top-[40rem] md:-top-80' : '-top-10'} min-w-[50rem] w-full opacityChange`}
             />
             <div className="relative z-20">
-              <p className="text-7xl md:text-8xl px-4 textChange text-center mb-4 font-semibold">Harness AI</p>
-              <p className="text-5xl md:text-6xl px-4 text-center text-neutral-800 font-light">For A Better You</p>
+              <p className={`text-8xl md:text-9xl px-4 textChange text-center mb-2 font-semibold tracking-wider ${koulen.className}`}>Harness AI</p>
+              <p className={`text-5xl md:text-6xl px-4 text-center text-neutral-800 ${roboto.className}`}>For A Better You</p>
             </div>
             {LogInState === 2 ? <SignUp /> : 
-            <div onClick={() => setLogInState(2)} className="relative z-20 mt-10 w-60 h-24 rounded-md border-2 bg-neutral-800 transition-all font-light hover:scale-[105%] border-neutral-800 flex justify-center items-center hover:shadow-md group hover:cursor-pointer">
-              <div className="pb-1 group-hover:text-white text-3xl text-white">Sign Up</div>
+            <div onClick={() => setLogInState(2)} className="relative z-20 mt-20 w-60 h-24 rounded-md border-2 bg-neutral-800 transition-all font-light hover:scale-[105%] border-neutral-800 flex justify-center items-center hover:shadow-md group hover:cursor-pointer">
+              <div className={`group-hover:text-white text-3xl text-white ${roboto.className}`}>Sign Up</div>
             </div>
             }
           </div>
           <div className="flex relative z-10 flex-row justify-center flex-wrap w-11/12 h-auto gap-6 py-6 mx-auto">
             <div className="relative flex flex-col items-center justify-center w-[29.5rem] h-[28rem] bg-neutral-800 rounded-md shadow-md p-4">
               <div className="h-2/3 flex justify-center items-center w-full rounded-md">
+                {/* Time and date icons created by fjstudio - Flaticon */}
                 <Image
                  src={food_schedule}
                  alt='Food Calendar'
-                 className="h-[14rem] w-[14rem] mb-4"
+                 className="h-[14rem] w-[14rem] mb-3"
                  />
               </div>
-              <p className="flex justify-center items-center text-center text-2xl font-light p-4 bg-neutral-800 rounded-md h-[8rem] text-neutral-300 w-11/12">
+              <p className={`flex justify-center items-center text-center text-2xl font-light p-4 bg-neutral-800 rounded-md h-[8rem] text-neutral-300 w-11/12 ${roboto.className}`}>
                 One weekly meal plan that provides recipes and nutritional content based on your goals.
               </p>
             </div>
             <div className="relative flex flex-col items-center justify-center w-[29.5rem] h-[28rem] bg-neutral-800 rounded-md shadow-md p-4">
               <div className="h-2/3 flex justify-center items-center w-full rounded-md">
+                {/* Workout icons created by nawicon - Flaticon */}
                 <Image
                  src={fitness_schedule}
                  alt='Fitness Plan'
                  className="h-[15rem] w-[15rem]"
                  />
               </div>
-              <p className="flex justify-center items-center text-center text-2xl font-light p-4 bg-neutral-800 rounded-md h-[8rem] text-neutral-300 w-11/12">
+              <p className={`flex justify-center items-center text-center text-2xl font-light p-4 bg-neutral-800 rounded-md h-[8rem] text-neutral-300 w-11/12 ${roboto.className}`}>
                 One weekly workout plan that fits your comfort level, availability, and equipment access.
               </p>
             </div>
             <div className="relative flex flex-col items-center justify-center w-[29.5rem] h-[28rem] bg-neutral-800 rounded-md shadow-md p-4">
               <div className="h-2/3 flex justify-center items-center w-full rounded-md">
+                {/* Enjoy icons created by Good Ware - Flaticon */}
                 <Image
                  src={person}
                  alt='Happy Person'
                  className="h-60 w-60"
                  />
               </div>
-              <p className="flex justify-center items-center text-center text-2xl font-light p-4 bg-neutral-800 rounded-md h-[8rem] text-neutral-300 w-11/12">
+              <p className={`flex justify-center items-center text-center text-2xl font-light p-4 bg-neutral-800 rounded-md h-[8rem] text-neutral-300 w-11/12 ${roboto.className}`}>
                 One unique you, whether you&#39;re looking to improve your health or simplify your life.
               </p>
             </div>
           </div>
           <div className="w-11/12 h-auto mx-auto bg-neutral-300 py-4 rounded-md shadow-md mt-2">
-            <div className="flex items-center pb-2 text-3xl font-semibold pl-8">How It Works</div>
+            <div className={`flex items-center pb-2 text-3xl font-semibold pl-8 tracking-widest ${koulen.className}`}>How It Works</div>
             <div className="h-[.05rem] w-full bg-neutral-800 my-2" />
-            <div className="px-8 text-2xl font-light">
+            <div className={`px-8 text-2xl font-light ${roboto.className}`}>
               <p className="py-2">With the rapid development of consumer grade technology, AI (Artificial Intelligence) has become a primary topic
               of innovation and future application. We believe AI is a powerful tool that can assist us in our daily lives and more
               specifically with our exercise and nutritional desires.</p>
