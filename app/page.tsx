@@ -83,7 +83,7 @@ export default function Home() {
             </div>
             <div className="relative flex justify-center w-[29.5rem] h-[28rem] bg-neutral-800 rounded-md shadow-md">
               <p className="flex justify-center items-center text-center text-2xl font-light p-4 bg-neutral-800 rounded-md h-[8rem] text-neutral-300 w-11/12 absolute bottom-4">
-                One unique you, whether you're looking to improve your health or simplify your life.
+                One unique you, whether you&#39;re looking to improve your health or simplify your life.
               </p>
             </div>
           </div>
