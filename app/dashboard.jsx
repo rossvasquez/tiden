@@ -18,7 +18,7 @@ export default function Dashboard({UserObj, SignOut}) {
                         <p className={`h-1/3 flex justify-center items-center text-white text-4xl ${roboto.className}`}>Age</p>
                     </div>
                     <div className="grow border-[.01rem] px-8 rounded-md border-white pt-6 h-[16rem]">
-                        <p className={`h-2/3 flex justify-center items-center text-white text-[12rem] ${koulen.className}`}>{UserObj.height.feet}<span className={`${roboto.className} text-[8rem] mb-10 mr-2`}>'</span>{UserObj.height.inches}<span className={`${roboto.className} text-[8rem] mb-10`}>"</span></p>
+                        <p className={`h-2/3 flex justify-center items-center text-white text-[12rem] ${koulen.className}`}>{UserObj.height.feet}<span className={`${roboto.className} text-[8rem] mb-10 mr-2`}>&#39;</span>{UserObj.height.inches}<span className={`${roboto.className} text-[8rem] mb-10`}>&#34;</span></p>
                         <p className={`h-1/3 flex justify-center items-center text-white text-4xl ${roboto.className}`}>Height</p>
                     </div>
                     <div className="grow border-[.01rem] px-8 rounded-md border-white pt-6 h-[16rem]">
@@ -57,7 +57,7 @@ export default function Dashboard({UserObj, SignOut}) {
                         <p className={`h-auto flex justify-top items-center text-white text-3xl ${roboto.className}`}>Equipment</p>
                         <div className="flex flex-wrap justify-top mt-6 items-center gap-6">
                             {returnArr(UserObj.workout_equipment).map((equip, id) => 
-                                <div className={`shrink p-6 border-2 border-amber-400 rounded-md text-3xl text-white ${roboto.className}`} id={id}>{equip}</div>
+                                <div className={`shrink p-6 border-2 border-amber-400 rounded-md text-3xl text-white ${roboto.className}`} key={id}>{equip}</div>
                             )}
                         </div>
                     </div>
@@ -75,7 +75,7 @@ export default function Dashboard({UserObj, SignOut}) {
                         <p className={`h-auto flex justify-top items-center text-amber-400 text-3xl ${roboto.className}`}>Foods To Avoid</p>
                         <div className="flex flex-wrap justify-top mt-6 items-center gap-6">
                             {returnArr(UserObj.avoid_food).map((equip, id) => 
-                                <div className={`shrink text-3xl text-white flex ${roboto.className}`} id={id}>
+                                <div className={`shrink text-3xl text-white flex ${roboto.className}`} key={id}>
                                     <div className="bg-amber-400 h-19 w-[.1rem] mr-6" />
                                     <p>{equip}</p>
                                 </div>
@@ -86,7 +86,7 @@ export default function Dashboard({UserObj, SignOut}) {
                         <p className={`h-auto flex justify-top items-center text-white text-3xl ${roboto.className}`}>Equipment</p>
                         <div className="flex flex-wrap justify-top mt-6 items-center gap-6">
                             {returnArr(UserObj.cooking_equipment).map((equip, id) => 
-                                <div className={`shrink p-6 border-2 border-amber-400 rounded-md text-3xl text-white ${roboto.className}`} id={id}>{equip}</div>
+                                <div className={`shrink p-6 border-2 border-amber-400 rounded-md text-3xl text-white ${roboto.className}`} key={id}>{equip}</div>
                             )}
                         </div>
                     </div>
