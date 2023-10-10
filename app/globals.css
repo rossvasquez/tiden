@@ -21,7 +21,7 @@
 }
 
 .textChange{
-  animation: 1s 2.5s linear colorChange forwards;
+  animation: .2s 2.5s linear colorChange forwards;
   color:white;
 }
 
@@ -35,5 +35,18 @@
 }
 
 .opacityChange {
-  animation: 1s 2.5s linear opacityChange forwards;
+  animation: .5s 2.5s linear opacityChange forwards;
+}
+
+@keyframes opacityChange1 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.signUpShow {
+  animation: .5s 1.5s linear opacityChange1 forwards;
 }

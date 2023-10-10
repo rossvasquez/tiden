@@ -2,7 +2,13 @@
 
 import { useState } from "react"
 
-import supabase from '../supabaseClient'
+import { signUpUser } from '../api/supabase/supabaseSignUp'
+
+import { addProfileInfo } from "../api/supabase/supabaseAddProfile"
+
+import { roboto, koulen } from "../../assets/styles/fonts"
+
+import VerifyHuman from "../api/recaptcha/recaptcha"
 
 export default function SignUp() {
 
@@ -43,24 +49,37 @@ export default function SignUp() {
 
     const [FormPage, setFormPage] = useState(1)
 
-    const signUpNext = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      setFormPage(prev => prev + 1)
-    }
-
     const FormNav = () =>
-    <div className="flex flex-row items-center justify-center max-w-lg gap-2">
-      <div onClick={() => setFormPage(prev => prev - 1)} className="text-neutral-800 hover:text-white w-1/2 bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 pb-1 hover:cursor-pointer">
-        <p className="text-xl font-semibold">Prev</p>
+    <div className={`flex flex-row items-center justify-center max-w-lg gap-2 ${roboto.className}`}>
+      <div onClick={() => setFormPage(prev => prev - 1)} className="text-neutral-800 hover:text-white w-1/2 bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 hover:cursor-pointer">
+        <p className="text-xl">Back</p>
       </div>
-      <button type="submit" className="text-neutral-800 hover:text-white w-1/2 bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 pb-1 hover:cursor-pointer">
-        <p className="text-xl font-semibold">Next</p>
-      </button>
+      <div onClick={() => setFormPage(prev => prev + 1)} className="text-neutral-800 hover:text-white w-1/2 bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 hover:cursor-pointer">
+        <p className="text-xl">Next</p>
+      </div>
     </div>
 
     //First Page
 
+    const [NoCap, setNoCap] = useState(true)
+
     const [PasswordMatch, setPasswordMatch] = useState(0)
+
+    const [SignUpError, setSignUpError] = useState('')
+
+    const signUpNext = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      const signUpSuccess = await signUpUser(UserInfo.email, UserInfo.password, UserInfo.first_name)
+      if (signUpSuccess.testy === true) {
+        setFormPage(prev => prev + 1)
+        console.log(signUpSuccess.info)
+      } else {
+        let error = signUpSuccess.info.toString()
+        let index = error.indexOf(':')
+        let displayError = error.slice(index + 1)
+        setSignUpError(displayError)
+      }
+    }
 
     const setFirstName = (e: { target: { value: string } }) => {
         let tempObj = {...UserInfo}
@@ -89,19 +108,26 @@ export default function SignUp() {
     }
     
     const signUpOne = () =>
-    <form onSubmit={(e) => signUpNext(e)} className="bg-neutral-800 p-10 md:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+    <form onSubmit={(e) => signUpNext(e)} className="sm:border sm:border-neutral-300 bg-neutral-800 p-10 sm:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+      <p className={`h-10 flex items-center pl-1 text-amber-400 capitalize ${SignUpError === '' || PasswordMatch === 1 ? 'hidden' : null}`}>{SignUpError}</p>
+      <p className={`h-10 flex items-center pl-1 text-amber-400 ${PasswordMatch === 1 ? null : 'hidden'}`}>Passwords Do Not Match</p> 
       <p className="pl-2 font-light text-white mb-1">First Name</p>
-      <input onChange={(e) => setFirstName(e)} value={UserInfo.first_name}className="w-full h-14 focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="text" />
+      <input onChange={(e) => setFirstName(e)} value={UserInfo.first_name}className="w-full h-14 shadow-inner focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="text" />
       <p className="pl-2 font-light text-white mb-1 mt-3">Email</p>
-      <input onChange={(e) => setEmail(e)} value={UserInfo.email} className="w-full h-14 focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="email" />
-      <p className={`h-10 mt-1 flex items-center text-red-400 ${PasswordMatch === 1 ? null : 'hidden'}`}>Passwords Do Not Match</p> 
+      <input onChange={(e) => setEmail(e)} value={UserInfo.email} className="w-full h-14 shadow-inner focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="email" />
       <p className={`pl-2 font-light text-white mb-1 ${PasswordMatch === 1 ? null : 'mt-3'}`}>Password</p>
-      <input onChange={(e) => setPassword(e)} value={UserInfo.password} className="w-full h-14 focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="password" />
+      <input onChange={(e) => setPassword(e)} value={UserInfo.password} className="w-full h-14 shadow-inner focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="password" />
       <p className="pl-2 font-light text-white mb-1 mt-3">Confirm Password</p>
-      <input onChange={(e) => passwordMatch(e)} className="w-full h-14 focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="password" />
-      <button type="submit" className="text-neutral-800 hover:text-white w-full max-w-lg bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 pb-1 hover:cursor-pointer">
-        <p className="text-xl font-semibold">Next</p>
+      <input onChange={(e) => passwordMatch(e)} className="w-full h-14 shadow-inner focus:outline-none rounded-md shadow-inner text-xl font-light p-2" type="password" />
+      {NoCap ?
+      <div className="mt-6 flex justify-center">
+        <VerifyHuman OnChangeFunc={() => setNoCap(false)} />
+      </div>
+      :
+      <button type="submit" disabled={NoCap} className={`${roboto.className} text-neutral-800 hover:text-white w-full max-w-lg bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 hover:cursor-pointer`}>
+        <p className="text-xl">Next</p>
       </button>
+      }
     </form>
 
     //Second Page
@@ -131,7 +157,7 @@ export default function SignUp() {
     }
 
     const signUpTwo = () =>
-    <form onSubmit={(e) => signUpNext(e)} className="bg-neutral-800 p-10 md:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+    <form className="sm:border sm:border-neutral-300 bg-neutral-800 p-10 sm:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
       <p className="pl-2 font-light text-white text-2xl mb-1">Age <span className="font-semibold">{UserInfo.age}</span></p>
       <input onChange={(e) => setAge(e)} value={UserInfo.age} className="mt-2 focus:cursor-pointer hover:cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-amber-400 [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:w-8 w-full [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-white" type="range" />
       <p className="pl-1 font-light text-white text-2xl mb-1 mt-4">Height</p>
@@ -191,7 +217,7 @@ export default function SignUp() {
     }
 
     const signUpThree = () =>
-    <form onSubmit={(e) => signUpNext(e)} className="bg-neutral-800 p-10 md:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+    <form className="sm:border sm:border-neutral-300 bg-neutral-800 p-10 sm:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
       <p className="pl-2 font-light text-white text-2xl mb-1">I Want To Exercise...</p>
       <p className="pl-2 font-light text-white text-2xl mb-1 mt-3"><span className="font-semibold">{UserInfo.workouts_week}</span> Times Per Week</p>
       <input onChange={(e) => setWorkoutsWeek(e)} value={UserInfo.workouts_week} className="mt-2 focus:cursor-pointer hover:cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-amber-400 [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:w-8 w-full [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-white" type="range" min='1' max='7' />
@@ -257,7 +283,7 @@ export default function SignUp() {
     }
 
     const signUpFour = () =>
-    <form onSubmit={(e) => signUpNext(e)} className="bg-neutral-800 p-10 md:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+    <form className="sm:border sm:border-neutral-300 bg-neutral-800 p-10 sm:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
       <p className="w-full text-center font-light text-white text-2xl mb-1">Select Exercise Equipment Access</p>
       <div className="w-full h-auto flex flex-wrap gap-4 justify-center mt-5">
         <div className={`h-14 border-2 border-amber-400 rounded-md flex justify-center items-center px-4 pb-1 text-xl font-light hover:cursor-pointer ${testEquipment("Jump Rope") === -1 ? 'text-white' : 'bg-amber-400 text-neutral-800'}`} onClick={() => setExerciseEquipment("Jump Rope")}>Jump Rope</div>
@@ -339,7 +365,7 @@ export default function SignUp() {
     }
 
     const signUpFive = () =>
-    <form onSubmit={(e) => signUpNext(e)} className="bg-neutral-800 p-10 md:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+    <form className="sm:border sm:border-neutral-300 bg-neutral-800 p-10 sm:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
       <p className="pl-2 font-light text-white text-2xl mb-1">Cooking Experience - <span className="font-semibold">{UserInfo.cooking_experience.exp}</span></p>
       <input onChange={(e) => setCookingExp(e)} value={UserInfo.cooking_experience.level} className="mt-2 focus:cursor-pointer hover:cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-amber-400 [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:w-8 w-full [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-white" type="range" min='0' max='3' />
       <p className="pl-2 font-light text-white text-2xl mb-1 mt-5">Allergies / Foods To Avoid</p>
@@ -383,21 +409,33 @@ export default function SignUp() {
       setUserInfo(tempObj)
     }
 
-    const regUser = (e: React.FormEvent<HTMLFormElement>) => {
+    const regUser = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      console.log(UserInfo)
+      const addProf = await addProfileInfo(UserInfo)
+      if (addProf.test) {
+        setFormPage(7)
+      } else {
+        console.log(addProf.info)
+      }
     }
 
     const signUpSix = () =>
-    <form onSubmit={(e) => regUser(e)} className="bg-neutral-800 p-10 md:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+    <form onSubmit={(e) => regUser(e)} className="sm:border sm:border-neutral-300 bg-neutral-800 p-10 sm:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
       <p className="pl-2 font-light text-white text-2xl mb-1">I Want To...</p>
-      <div onClick={() => setGoal("Lose Weight")} className={`w-full h-14 border-2 border-amber-400 rounded-md mt-4 flex justify-center items-center pb-1 text-2xl font-light hover:cursor-pointer ${UserInfo.personal_goal === "Lose Weight" ? 'bg-amber-400 text-neutral-800' : 'text-white'}`}>Lose Weight</div>
-      <div onClick={() => setGoal("Gain Weight")} className={`w-full h-14 border-2 border-amber-400 rounded-md mt-4 flex justify-center items-center pb-1 text-2xl font-light hover:cursor-pointer ${UserInfo.personal_goal === "Gain Weight" ? 'bg-amber-400 text-neutral-800' : 'text-white'}`}>Gain Weight</div>
-      <div onClick={() => setGoal("Maintain Weight")} className={`w-full h-14 border-2 border-amber-400 rounded-md mt-4 flex justify-center items-center pb-1 text-2xl font-light hover:cursor-pointer ${UserInfo.personal_goal === "Maintain Weight" ? 'bg-amber-400 text-neutral-800' : 'text-white'}`}>Maintain Weight</div>
-      <button type="submit" className="text-neutral-800 hover:text-white w-full max-w-lg bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 pb-1 hover:cursor-pointer">
-        <p className="text-xl font-semibold">Register</p>
+      <div onClick={() => setGoal("Lose Weight")} className={`w-full h-16 border-2 border-amber-400 rounded-md mt-4 flex justify-center items-center pb-1 text-2xl font-light hover:cursor-pointer ${UserInfo.personal_goal === "Lose Weight" ? 'bg-amber-400 text-neutral-800' : 'text-white'}`}>Lose Weight</div>
+      <div onClick={() => setGoal("Gain Weight")} className={`w-full h-16 border-2 border-amber-400 rounded-md mt-4 flex justify-center items-center pb-1 text-2xl font-light hover:cursor-pointer ${UserInfo.personal_goal === "Gain Weight" ? 'bg-amber-400 text-neutral-800' : 'text-white'}`}>Gain Weight</div>
+      <div onClick={() => setGoal("Maintain Weight")} className={`w-full h-16 border-2 border-amber-400 rounded-md mt-4 flex justify-center items-center pb-1 text-2xl font-light hover:cursor-pointer ${UserInfo.personal_goal === "Maintain Weight" ? 'bg-amber-400 text-neutral-800' : 'text-white'}`}>Maintain Weight</div>
+      <button type="submit" className={`text-neutral-800 hover:text-white w-full max-w-lg bg-amber-400 text-neutral-800 h-16 rounded-md shdaow-md mx-auto mt-6 flex justify-center items-center hover:bg-transparent hover:border-2 border-amber-300 hover:cursor-pointer ${roboto.className}`}>
+        <p className="text-xl">Register</p>
       </button>
     </form>
+
+    const signUpSuccess = () =>
+    <div className="sm:border sm:border-neutral-300 bg-neutral-800 p-10 sm:rounded-md shadow-md h-auto w-full max-w-xl mx-auto mt-14">
+      <p className={`text-3xl text-white leading-[3rem] ${roboto.className}`}><span className="text-4xl text-amber-400 font-semibold tracking-[.1rem]">{UserInfo.first_name},</span></p>
+      <p className={`text-3xl text-white leading-[3rem] mt-3 ${roboto.className}`}> Thank you for signing up. </p> 
+      <p className={`text-3xl text-white leading-[3rem] mt-3 ${roboto.className}`}>We hope your experience with Tiden is one of improvement. If you ever feel like we can improve, please reach out. </p> 
+    </div>
 
     return(
         <div className="w-full z-20 relative">
@@ -407,6 +445,7 @@ export default function SignUp() {
         {FormPage === 4 ? signUpFour() : null}
         {FormPage === 5 ? signUpFive() : null}
         {FormPage === 6 ? signUpSix() : null}
+        {FormPage === 7 ? signUpSuccess() : null}
         <div className="mt-8 w-full gap-3 flex justify-center items-center">
           <div className={`w-4 h-4 rounded-full border-2 border-neutral-800 ${FormPage > 1 ? 'bg-neutral-800' : null} ${FormPage === 1 ? 'bg-white' : null}`}/>
           <div className={`w-4 h-4 rounded-full border-2 border-neutral-800 ${FormPage > 2 ? 'bg-neutral-800' : null} ${FormPage === 2 ? 'bg-white' : null}`}/>
