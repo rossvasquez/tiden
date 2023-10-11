@@ -4,7 +4,7 @@ export const addProfileInfo = async (profile: any) => {
     const { error } = await supabase
         .from('profile_setup')
         .insert({
-            name: profile.first_name,
+            first_name: profile.first_name,
             age: profile.age, 
             height: profile.height, 
             weight: profile.weight, 
