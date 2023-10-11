@@ -1,0 +1,43 @@
+{
+  "api": {
+    "lambda": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getMealPlanAI"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "getMealPlanAI": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_getMealPlanAI_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getMealPlanAI"
+        }
+      ]
+    },
+    "AMPLIFY_function_getMealPlanAI_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getMealPlanAI"
+        }
+      ]
+    }
+  }
+}

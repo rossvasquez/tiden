@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/generations": {
+      "name": "/generations",
+      "lambdaFunction": "getMealPlanAI",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

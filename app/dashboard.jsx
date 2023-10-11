@@ -4,6 +4,8 @@ import { roboto, koulen } from "@/assets/styles/fonts"
 
 import { useState } from "react"
 
+import { generateMealPlan } from "./api/generations/generateMealPlan"
+
 export default function Dashboard({UserObj, SignOut}) {
 
     const returnArr = (textArr) => {
@@ -15,7 +17,7 @@ export default function Dashboard({UserObj, SignOut}) {
         <p className={`${roboto.className} text-white px-8 py-4 text-3xl border-b-2 border-amber-400`}>Meal Plan</p>
         <div className="flex justify-center w-full h-80 items-center p-6">
             <div className="group hover:cursor-pointer hover:bg-neutral-600 rounded-md h-full w-full flex justify-center items-center border-[.01rem] border-white bg-neutral-800">
-                <div className="flex flex-col items-center">
+                <div onClick={() => generateMealPlan()} className="flex flex-col items-center">
                     <p className={`${roboto.className} text-3xl mb-3 text-white`}>No Meal Plans</p>
                     <p className={`${roboto.className} group-hover:text-amber-400 text-xl text-white`}>Click To Generate</p>
                 </div>

@@ -1,0 +1,26 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify5a3060b82e534-staging-14930-authRole",
+      "UnauthRoleArn": "arn:aws:iam::946507185684:role/amplify-amplify5a3060b82e534-staging-14930-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::946507185684:role/amplify-amplify5a3060b82e534-staging-14930-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-amplify5a3060b82e534-staging-14930-deployment",
+      "UnauthRoleName": "amplify-amplify5a3060b82e534-staging-14930-unauthRole",
+      "StackName": "amplify-amplify5a3060b82e534-staging-14930",
+      "StackId": "arn:aws:cloudformation:us-east-2:946507185684:stack/amplify-amplify5a3060b82e534-staging-14930/6b2ad4b0-67d8-11ee-8b4a-02ad92224953",
+      "AmplifyAppId": "d30eo718xytwuh"
+    },
+    "categories": {
+      "function": {
+        "getMealPlanAI": {
+          "deploymentBucketName": "amplify-amplify5a3060b82e534-staging-14930-deployment",
+          "s3Key": "amplify-builds/getMealPlanAI-4361774f386b4e684c2b-build.zip"
+        }
+      },
+      "api": {
+        "lambda": {}
+      }
+    }
+  }
+}
