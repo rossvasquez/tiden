@@ -1,0 +1,19 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "West Des Moines",
+			"country": {
+				"code": "US",
+				"name": "United States"
+			},
+			"subdivision": {
+				"code": "IA",
+				"name": "Iowa"
+			},
+			"timezone": "America/Chicago",
+			"latitude": 41.5757,
+			"longitude": -93.7364
+		},
+		"timestamp": 1696974965300
+	}
+}
