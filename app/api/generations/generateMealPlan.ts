@@ -2,9 +2,9 @@ import supabase from "../supabase/supabaseClient";
 
 import { API } from 'aws-amplify'
 
-export const generateMealPlan = () => {
+export const generateMealPlan = async () => {
 
-    let event = {
+    const userData = {
         "age": 24,
         "height": {
           "feet": 6,
@@ -20,35 +20,51 @@ export const generateMealPlan = () => {
         "personal_goal": "Lose Weight"
       }
 
-    async function sendData(event: any) {
-      const apiUrl = 'https://jo4y73shkkhe2xs6yab2pwoqvy0bytrf.lambda-url.us-east-2.on.aws/';
-    
-      try {
-        // Construct the fetch options
-        const fetchOptions = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Add any other headers here
-          },
-          body: event, // Convert the event object to a string
-        };
-    
-        // Perform the fetch operation
-        const response = await fetch(apiUrl, fetchOptions);
-    
-        // Check if the response is ok (status 200-299)
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
+    interface MyType {
+      test: boolean;
+      info: any;
+    }
+
+    let returnObj: MyType = {
+        "test": false,
+        "info": '',
+    }
+
+    const apiUrl = 'https://ilgcyoycvkkh6gupsjxgwla5ju0sfsvz.lambda-url.us-east-2.on.aws/';
+
+    try {
+      // Construct the fetch options
+      const fetchOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers here
+        },
+        body: JSON.stringify(userData), // Convert the event object to a string
+      };
+
+      // Perform the fetch operation
+      const response = await fetch(apiUrl, fetchOptions);
+
+      // Check if the response is ok (status 200-299)
+      if (!response.ok) {
+        returnObj = {
+          "test": false,
+          "info": response.statusText
         }
-    
-        // Parse and log the response body
-        const data = await response.json();
-        console.log('Response data:', data);
-      } catch (error) {
-        console.error('Fetch error: ', error);
+      } else {
+          const data = await response.json();
+          returnObj = {
+              "test": true,
+              "info": data
+          }
+      }
+    } catch (error) {
+      returnObj = {
+          "test": true,
+          "info": error
       }
     }
-    
-    sendData(event);
+
+    return returnObj
 }

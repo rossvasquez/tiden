@@ -16,6 +16,10 @@
         "getMealPlanAI": {
           "deploymentBucketName": "amplify-amplify5a3060b82e534-staging-14930-deployment",
           "s3Key": "amplify-builds/getMealPlanAI-4361774f386b4e684c2b-build.zip"
+        },
+        "generateMealPlan": {
+          "deploymentBucketName": "amplify-amplify5a3060b82e534-staging-14930-deployment",
+          "s3Key": "amplify-builds/generateMealPlan-675a592b32514c546d7a-build.zip"
         }
       },
       "api": {

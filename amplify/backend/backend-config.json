@@ -16,6 +16,12 @@
     }
   },
   "function": {
+    "generateMealPlan": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "getMealPlanAI": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -23,6 +29,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_generateMealPlan_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "generateMealPlan"
+        }
+      ]
+    },
+    "AMPLIFY_function_generateMealPlan_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "generateMealPlan"
+        }
+      ]
+    },
     "AMPLIFY_function_getMealPlanAI_deploymentBucketName": {
       "usedBy": [
         {
