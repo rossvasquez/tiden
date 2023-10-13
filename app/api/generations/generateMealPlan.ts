@@ -61,7 +61,7 @@ export const generateMealPlan = async () => {
       }
     } catch (error) {
       returnObj = {
-          "test": true,
+          "test": false,
           "info": error
       }
     }
