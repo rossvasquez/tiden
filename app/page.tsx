@@ -35,6 +35,7 @@ export default function Home() {
 
   const [Email, setEmail] = useState('')
   const [Password, setPassword] = useState('')
+  const [ErrorMes, setErrorMes] = useState('')
 
   const logInController = async () => {
     const response = await logUserIn(Email, Password)
@@ -43,20 +44,21 @@ export default function Home() {
       setUserInfo(response.info)
       console.log(response.info)
     } else {
-      console.log(response.info)
+      setErrorMes(response.info.message)
     }
   }
 
   const logIn = () =>
   <div className="mx-auto h-auto w-full max-w-lg mx-auto bg-amber-400 p-6 rounded-md mt-40 shadow-md">
-    <div className="h-10 -mt-3 w-full relative">
+    <div className="h-10 -mt-3 w-full flex items-center relative">
+      {ErrorMes == '' ? null : <p className="pl-2 font-semibold capitalize text-neutral-800">{ErrorMes}</p>}
       <div onClick={() => setLogInState(0)} className="absolute right-1 rounded-full w-8 active:bg-white hover:cursor-pointer flex justify-center items-center hover:bg-white mt-2">
-      {/* Close icons created by Freepik - Flaticon */}
-      <Image
-       src={backButton}
-       alt='Back button'
-       className="h-8 w-8"
-       />
+        {/* Close icons created by Freepik - Flaticon */}
+        <Image
+         src={backButton}
+         alt='Back button'
+         className="h-8 w-8"
+         />
       </div>
     </div>
     <p className="pl-2 font-light text-neutral-800 mb-1">Email</p>

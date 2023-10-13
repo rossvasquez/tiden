@@ -2,9 +2,10 @@
 
 import { roboto, koulen } from "@/assets/styles/fonts"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import { generateMealPlan } from "./api/generations/generateMealPlan"
+import { checkForGeneration } from "./api/generations/checkForGeneration"
 
 export default function Dashboard({UserObj, SignOut}) {
 
@@ -13,21 +14,34 @@ export default function Dashboard({UserObj, SignOut}) {
     }
 
     const [GenerateMealState, setGenerateMealState] = useState(0)
-    const [GenerateMeal, setGenerateMeal] = useState('')
+    const [GenerateMeal, setGenerateMeal] = useState([])
+    const [CheckBase, setCheckBase] = useState(false)
 
     const handleMealPlanGen = async () => {
         setGenerateMealState(1)
-        const response = await generateMealPlan()
+        const response = await generateMealPlan(UserObj)
         if (response.test) {
-            console.log(response)
-            const plan = JSON.parse(response.info)
-            setGenerateMealState(2)
-            setGenerateMeal(plan)
+            setCheckBase(true)
         } else {
             console.log(response.info)
         }
         
     }
+
+    useEffect(() => {
+        const getIt = async () => {
+            const returnVal = await checkForGeneration(UserObj.id)
+            if (returnVal.test) {
+                setGenerateMeal(returnVal.info.generation_obj)
+                setGenerateMealState(2)
+                console.log(returnVal.info)
+            } else {
+                setGenerateMeal(0)
+                console.log(returnVal)
+            }
+        }
+        getIt()
+      }, [CheckBase]);
 
     const [MealGenState, setMealGenState] = useState({
         "tab": 0,
@@ -179,7 +193,7 @@ export default function Dashboard({UserObj, SignOut}) {
 
                 {GenerateMealState === 1 ?
                 <div className="flex flex-col items-center">
-                    <p className={`${roboto.className} animate-pulse text-3xl mb-3 text-white`}>Generating Meal Plan...</p>
+                    <p className={`${roboto.className} animate-pulse text-center text-3xl mb-3 text-white`}>Generating Meal Plan...</p>
                     <p className={`${roboto.className} text-xl text-amber-400`}>This can take a few minutes</p>
                 </div>
                 : null}
@@ -225,19 +239,19 @@ export default function Dashboard({UserObj, SignOut}) {
         <div className="bg-neutral-800 w-full h-auto">
             <p className={`text-neutral-900 bg-amber-400 text-3xl px-2 ${roboto.className} px-8 py-4`}>Workout Information</p>
             <div className="flex justify-center items-center py-2 px-6 flex-wrap w-full bg-neutral-900 gap-6 py-6">
-                <div className="bg-neutral-800 grow border-[.01rem] rounded-md border-white p-6 h-auto">
+                <div className="bg-neutral-800 grow border-[.1rem] rounded-md border-white p-6 h-auto">
                     <p className={`h-auto flex justify-top items-center text-amber-400 text-3xl ${roboto.className}`}>Experience</p>
                     <p className={`h-auto flex justify-top items-center text-white text-7xl mt-3 ${koulen.className}`}>{UserObj.workout_experience.exp}</p>
                 </div>
-                <div className="bg-neutral-800 grow border-[.01rem] rounded-md border-white p-6 h-auto">
+                <div className="bg-neutral-800 grow border-[.1rem] rounded-md border-white p-6 h-auto">
                     <p className={`h-auto flex justify-top items-center text-amber-400 text-3xl ${roboto.className}`}>Emphasis</p>
                     <p className={`h-auto flex justify-top items-center text-white text-7xl mt-3 ${koulen.className}`}>{UserObj.workout_emphasis}</p>
                 </div>
-                <div className="bg-neutral-800 grow border-[.01rem] rounded-md border-white p-6 h-auto">
+                <div className="bg-neutral-800 grow border-[.1rem] rounded-md border-white p-6 h-auto">
                     <p className={`h-auto flex justify-top items-center text-amber-400 text-3xl ${roboto.className}`}>Workouts Per Week</p>
                     <p className={`h-auto flex justify-top items-center text-white text-7xl mt-3 ${koulen.className}`}>{UserObj.workouts_week}</p>
                 </div>
-                <div className="bg-neutral-800 grow border-[.01rem] rounded-md border-white p-6 h-auto">
+                <div className="bg-neutral-800 grow border-[.1rem] rounded-md border-white p-6 h-auto">
                     <p className={`h-auto flex justify-top items-center text-amber-400 text-3xl ${roboto.className}`}>Workout Length</p>
                     <p className={`h-auto flex justify-top items-center text-white text-7xl mt-3 ${koulen.className}`}>
                         {UserObj.workout_length.hours > 0 ? `${UserObj.workout_length.hours}` : null}
@@ -247,7 +261,7 @@ export default function Dashboard({UserObj, SignOut}) {
                         {UserObj.workout_length.minutes === 0 ? null : <span className={`${roboto.className} text-3xl ml-2 mt-5`}>minutes</span>}
                     </p>
                 </div>
-                <div className="bg-neutral-800 grow border-[.01rem] rounded-md border-white p-6 h-auto">
+                <div className="bg-neutral-800 grow border-[.1rem] rounded-md border-white p-6 h-auto">
                     <p className={`h-auto flex justify-top items-center text-white text-3xl ${roboto.className}`}>Equipment</p>
                     <div className="flex flex-wrap justify-top mt-6 items-center gap-6">
                         {returnArr(UserObj.workout_equipment).map((equip, id) => 
@@ -260,11 +274,11 @@ export default function Dashboard({UserObj, SignOut}) {
         <div className="bg-neutral-900 w-full pb-6 h-auto rounded-b-md">
             <p className={`text-neutral-900 bg-amber-400 h-full text-3xl px-2 py-4 ${roboto.className} px-8`}>Cooking Information</p>
             <div className="flex justify-top items-center py-2 px-6 flex-wrap w-full gap-6 mt-4">
-                <div className="bg-neutral-800 shrink border-[.01rem] rounded-md border-white px-10 py-6 h-[10.5rem]">
+                <div className="bg-neutral-800 shrink border-[.1rem] rounded-md border-white px-10 py-6 h-[10.5rem]">
                     <p className={`h-auto flex justify-top items-center text-amber-400 text-3xl ${roboto.className}`}>Experience</p>
                     <p className={`h-auto flex justify-top items-center text-white text-7xl mt-3 ${koulen.className}`}>{UserObj.cooking_experience.exp}</p>
                 </div>
-                <div className="bg-neutral-800 grow border-[.01rem] rounded-md border-white p-6 h-[10.5rem]">
+                <div className="bg-neutral-800 grow border-[.1rem] rounded-md border-white p-6 h-[10.5rem]">
                     <p className={`h-auto flex justify-top items-center text-amber-400 text-3xl ${roboto.className}`}>Foods To Avoid</p>
                     <div className="flex flex-wrap justify-top mt-6 items-center gap-6">
                         {returnArr(UserObj.avoid_food).map((equip, id) => 
@@ -275,7 +289,7 @@ export default function Dashboard({UserObj, SignOut}) {
                         )}
                     </div>
                 </div>
-                <div className="bg-neutral-800 grow border-[.01rem] rounded-md border-white p-6 h-auto">
+                <div className="bg-neutral-800 grow border-[.1rem] rounded-md border-white p-6 h-auto">
                     <p className={`h-auto flex justify-top items-center text-white text-3xl ${roboto.className}`}>Equipment</p>
                     <div className="flex flex-wrap justify-top mt-6 items-center gap-6">
                         {returnArr(UserObj.cooking_equipment).map((equip, id) => 

@@ -2,22 +2,31 @@ import supabase from "../supabase/supabaseClient";
 
 import { API } from 'aws-amplify'
 
-export const generateMealPlan = async () => {
+export const generateMealPlan = async (UserObj: any) => {
+
+    const parseArr = async (arrString: string) => {
+      let parsedArr = JSON.parse(arrString)
+      let returnString: string = ''
+      let arrayStepper: number = 1
+      parsedArr.forEach((item: string) => {
+        if((arrayStepper) === parsedArr.length) {
+          returnString += `${item}`
+        } else {
+          returnString += `${item}, `
+          arrayStepper++
+        }
+      })
+      return returnString
+    }
 
     const userData = {
-        "age": 24,
-        "height": {
-          "feet": 6,
-          "inches": 4
-        },
-        "weight": 235,
-        "cooking_experience": {
-          "exp": "Intermediate",
-          "level": 2
-        },
-        "cooking_equipment": "Oven, Stove Top, Slow Cooker, Microwave, Toaster, Blender, Frying Pan(s), Sauce Pot(s), Baking Sheet",
-        "avoid_food": "Mushrooms",
-        "personal_goal": "Lose Weight"
+        "age": UserObj.age,
+        "height": UserObj.height,
+        "weight": UserObj.weight,
+        "cooking_experience": UserObj.cooking_experience,
+        "cooking_equipment": await parseArr(UserObj.cooking_equipment),
+        "avoid_food": await parseArr(UserObj.avoid_food),
+        "personal_goal": UserObj.personal_goal
       }
 
     interface MyType {
@@ -58,6 +67,7 @@ export const generateMealPlan = async () => {
               "test": true,
               "info": data
           }
+          console.log(returnObj)
       }
     } catch (error) {
       returnObj = {
@@ -65,6 +75,21 @@ export const generateMealPlan = async () => {
           "info": error
       }
     }
+
+    const { error } = await supabase
+        .from('current_generations')
+        .insert({generation_obj: JSON.parse(returnObj.info)})
+      if (error) {
+        returnObj = {
+          "test": false,
+          "info": error
+        }
+      } else {
+        returnObj = {
+          "test": true,
+          "info": 'success m8'
+        }
+      }
 
     return returnObj
 }
