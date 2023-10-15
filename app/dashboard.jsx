@@ -162,7 +162,7 @@ export default function Dashboard({UserObj, SignOut}) {
     <p className={`${roboto.className} mt-10 mb-4 text-3xl text-center px-2 text-white`}>Select a day from your meal plan.</p>
     <div className={`${koulen.className} flex flex-wrap justify-center w-full items-center p-6 mb-4 gap-6`}>
     {GenerateMeal.map((item, id) =>
-        <div onClick={() => setMealPlanDay(id)} className="hover:text-amber-400 hover:cursor-pointer text-white bg-neutral-900 tracking-[.1rem] text-4xl h-20 px-10 shrink flex justify-center items-center rounded-md">
+        <div key={id} onClick={() => setMealPlanDay(id)} className="hover:text-amber-400 hover:cursor-pointer text-white bg-neutral-900 tracking-[.1rem] text-4xl h-20 px-10 shrink flex justify-center items-center rounded-md">
             Day {id + 1}
         </div>
         )}
