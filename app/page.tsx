@@ -10,7 +10,7 @@ import { logUserIn } from "./api/supabase/supabaseLogIn"
 import { signUserOut } from "./api/supabase/supabaseSignOut"
 
 import SignUp from "./homepage_components/signUp"
-import Dashboard from "./dashboard.jsx"
+import Dashboard from "./homepage_components/dashboard.jsx"
 
 import Lottie from "lottie-react"
 

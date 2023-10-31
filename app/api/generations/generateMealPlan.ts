@@ -42,27 +42,23 @@ export const generateMealPlan = async (UserObj: any) => {
     const apiUrl = 'https://ilgcyoycvkkh6gupsjxgwla5ju0sfsvz.lambda-url.us-east-2.on.aws/';
 
     try {
-      // Construct the fetch options
       const fetchOptions = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add any other headers here
         },
-        body: JSON.stringify(userData), // Convert the event object to a string
+        body: JSON.stringify(userData),
       };
 
-      // Perform the fetch operation
-      const response = await fetch(apiUrl, fetchOptions);
-
-      // Check if the response is ok (status 200-299)
+      const response = await fetch(apiUrl, fetchOptions)
+    
       if (!response.ok) {
         returnObj = {
           "test": false,
           "info": response.statusText
         }
       } else {
-          const data = await response.json();
+          const data = await response.json()
           returnObj = {
               "test": true,
               "info": data

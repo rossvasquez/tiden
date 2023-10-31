@@ -15,7 +15,7 @@ export const checkForGeneration = async (user_val: UUID) => {
 
     const { data, error } = await supabase
         .from('current_generations')
-        .select('generation_obj')
+        .select('generation_obj, created_at')
         .eq('id', user_val)
     
         if(error) {
@@ -26,7 +26,7 @@ export const checkForGeneration = async (user_val: UUID) => {
         } else {
             returnObj = {
                 "test":true,
-                "info": data[0]
+                "info": data
             }
         }
     

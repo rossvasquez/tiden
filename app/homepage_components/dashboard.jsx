@@ -4,8 +4,8 @@ import { roboto, koulen } from "@/assets/styles/fonts"
 
 import { useState, useEffect } from "react"
 
-import { generateMealPlan } from "./api/generations/generateMealPlan"
-import { checkForGeneration } from "./api/generations/checkForGeneration"
+import { generateMealPlan } from "../api/generations/generateMealPlan"
+import { checkForGeneration } from "../api/generations/checkForGeneration"
 
 export default function Dashboard({UserObj, SignOut}) {
 
@@ -32,9 +32,9 @@ export default function Dashboard({UserObj, SignOut}) {
         const getIt = async () => {
             const returnVal = await checkForGeneration(UserObj.id)
             if (returnVal.test) {
-                setGenerateMeal(returnVal.info.generation_obj)
+                setGenerateMeal(returnVal)
                 setGenerateMealState(2)
-                console.log(returnVal.info)
+                console.log(returnVal)
             } else {
                 setGenerateMeal(0)
                 console.log(returnVal)
@@ -58,6 +58,7 @@ export default function Dashboard({UserObj, SignOut}) {
     }
 
     const [MealPlanDay, setMealPlanDay] = useState(7)
+    const [GenerationCluster, setGenerationCluster] = useState(0)
 
     const DailyMeal = ({MealData}) =>
     <div className="p-6 w-full">
@@ -159,9 +160,12 @@ export default function Dashboard({UserObj, SignOut}) {
 
     const MealMenu = () =>
     <>
-    <p className={`${roboto.className} mt-10 mb-4 text-3xl text-center px-2 text-white`}>Select a day from your meal plan.</p>
+    <div className="relative w-full flex justify-center items-center mt-10 mb-4">
+        <p className={`${roboto.className} text-3xl text-center px-2 text-white`}>Select a day from your meal plan.</p>
+        <div onClick={() => setGenerationCluster(0)} className={`absolute right-12 w-20 flex text-xl items-center justify-center h-14 hover:text-white hover:cursor-pointer bg-amber-400 rounded-md ${roboto.className}`}>Back</div>
+    </div>
     <div className={`${koulen.className} flex flex-wrap justify-center w-full items-center p-6 mb-4 gap-6`}>
-    {GenerateMeal.map((item, id) =>
+    {GenerateMeal.info[0].generation_obj.map((item, id) =>
         <div key={id} onClick={() => setMealPlanDay(id)} className="hover:text-amber-400 hover:cursor-pointer text-white bg-neutral-900 tracking-[.1rem] text-4xl h-20 px-10 shrink flex justify-center items-center rounded-md">
             Day {id + 1}
         </div>
@@ -169,12 +173,58 @@ export default function Dashboard({UserObj, SignOut}) {
     </div>
     </>
 
+    const getDate = (date) => {
+
+        let dateRange = {
+            from: '',
+            to: ''
+        }
+        const dateFrom = new Date(date)
+
+        const dateFromMonth = (dateFrom.getMonth() + 1).toString().padStart(2, '0')
+        const dateFromDay = (dateFrom.getDate()).toString().padStart(2, '0')
+
+        dateRange.from = `${dateFromMonth}/${dateFromDay}`
+
+        const dateTo = new Date(date)
+        
+        dateTo.setTime(dateFrom.getTime() + 6 * 24 * 60 * 60 * 1000)
+
+        const dateToMonth = (dateTo.getMonth() + 1).toString().padStart(2, '0')
+        const dateToDay = (dateTo.getDate()).toString().padStart(2, '0')
+
+        dateRange.to = `${dateToMonth}/${dateToDay}`
+
+        return `${dateRange.from}-${dateRange.to}`
+        
+    }
+
+    const DatesMenu = () =>
+    <>
+    <p className={`${roboto.className} mt-10 mb-4 text-3xl text-center px-2 text-white`}>Select from one of your generations below.</p>
+    <div className={`${koulen.className} flex flex-wrap justify-center w-full items-center p-6 mb-4 gap-6`}>
+        {GenerateMeal.info.map((item, id) =>
+            <div key={id} onClick={() => setGenerationCluster(id+1)} className="hover:text-amber-400 hover:cursor-pointer text-white bg-neutral-900 tracking-[.1rem] text-4xl h-20 w-full shrink flex justify-center items-center rounded-md">
+                {getDate(item.created_at)}
+            </div>
+            )}
+    </div>
+    </>
+
+    const returnMenu = () => {
+        if (GenerationCluster === 0) {
+            return <DatesMenu />
+        } else {
+            return <MealMenu />
+        }
+    }
+
     const MealPlanInternal = () =>
     <>
     {MealPlanDay === 7 ?
-    <MealMenu />
+    returnMenu()
     :
-    <DailyMeal MealData={GenerateMeal[MealPlanDay]} />
+    <DailyMeal MealData={GenerateMeal.info[GenerationCluster-1].generation_obj[MealPlanDay]} />
     }
     </>
 
