@@ -17,6 +17,8 @@ export const checkForGeneration = async (user_val: UUID) => {
         .from('current_generations')
         .select('generation_obj, created_at')
         .eq('id', user_val)
+
+        console.log(data, error)
     
         if(error) {
             returnObj = {

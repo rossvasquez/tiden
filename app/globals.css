@@ -50,3 +50,7 @@
 .signUpShow {
   animation: .5s 1.5s linear opacityChange1 forwards;
 }
+
+body {
+  overflow-x: hidden;
+}

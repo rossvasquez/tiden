@@ -22,8 +22,6 @@ export default function Dashboard({UserObj, SignOut}) {
         const response = await generateMealPlan(UserObj)
         if (response.test) {
             setCheckBase(true)
-        } else {
-            console.log(response.info)
         }
         
     }
@@ -31,10 +29,10 @@ export default function Dashboard({UserObj, SignOut}) {
     useEffect(() => {
         const getIt = async () => {
             const returnVal = await checkForGeneration(UserObj.id)
-            if (returnVal.test) {
+            if (returnVal.test && returnVal.info.length > 0) {
                 setGenerateMeal(returnVal)
                 setGenerateMealState(2)
-                console.log(returnVal)
+                console.log(returnVal.test)
             } else {
                 setGenerateMeal(0)
                 console.log(returnVal)
@@ -160,13 +158,13 @@ export default function Dashboard({UserObj, SignOut}) {
 
     const MealMenu = () =>
     <>
-    <div className="relative w-full flex justify-center items-center mt-10 mb-4">
+    <div className="relative w-full flex flex-col-reverse md:flex-row justify-center items-center mt-6 md:mt-10 mb-4">
         <p className={`${roboto.className} text-3xl text-center px-2 text-white`}>Select a day from your meal plan.</p>
-        <div onClick={() => setGenerationCluster(0)} className={`absolute right-12 w-20 flex text-xl items-center justify-center h-14 hover:text-white hover:cursor-pointer bg-amber-400 rounded-md ${roboto.className}`}>Back</div>
+        <div onClick={() => setGenerationCluster(0)} className={`md:absolute right-12 w-40 mb-4 md:mb-0 md:w-20 flex text-xl items-center justify-center h-14 hover:text-white hover:cursor-pointer bg-amber-400 rounded-md ${roboto.className}`}>Back</div>
     </div>
-    <div className={`${koulen.className} flex flex-wrap justify-center w-full items-center p-6 mb-4 gap-6`}>
+    <div className={`${koulen.className} flex flex-wrap justify-center w-full items-center p-2 md:p-6 mb-4 gap-6`}>
     {GenerateMeal.info[0].generation_obj.map((item, id) =>
-        <div key={id} onClick={() => setMealPlanDay(id)} className="hover:text-amber-400 hover:cursor-pointer text-white bg-neutral-900 tracking-[.1rem] text-4xl h-20 px-10 shrink flex justify-center items-center rounded-md">
+        <div key={id} onClick={() => setMealPlanDay(id)} className="hover:text-amber-400 hover:cursor-pointer text-white bg-neutral-900 tracking-[.1rem] text-4xl h-20 px-6 md:px-10 shrink flex justify-center items-center rounded-md">
             Day {id + 1}
         </div>
         )}
@@ -228,11 +226,10 @@ export default function Dashboard({UserObj, SignOut}) {
     }
     </>
 
-
     const MealPlan = () =>
     <div className="w-full md:rounded-md bg-neutral-900 shadow-md mt-4 min-h-[18rem]">
-        <p className={`${roboto.className} text-white px-8 py-4 text-3xl border-b-2 border-amber-400`}>Meal Plan</p>
-        <div className={`flex justify-center w-full ${GenerateMealState === 2 ? 'h-auto' : 'h-80'} items-center p-6`}>
+        <p className={`${roboto.className} text-white px-4 md:px-8 py-4 text-3xl border-b-2 border-amber-400`}>Meal Plan</p>
+        <div className={`flex justify-center w-full ${GenerateMealState === 2 ? 'h-auto' : 'h-80'} items-center p-4 md:p-6`}>
             <div className={`group overflow-hidden ${GenerateMealState === 0 ? 'hover:bg-neutral-600 hover:cursor-pointer' : null} rounded-md h-full w-full flex flex-col justify-center items-center border-[.1rem] border-white ${GenerateMealState === 1 ? 'bg-neutral-600' : 'bg-neutral-800'}`}>
                 {GenerateMealState === 0 ?
                 <div onClick={() => handleMealPlanGen()} className="flex flex-col items-center">
@@ -280,9 +277,9 @@ export default function Dashboard({UserObj, SignOut}) {
 
     const ProfileDash = () =>
     <div className={`w-full transition-all ${ShowProfile ? 'h-auto' : 'h-[7rem]'} overflow-hidden shadow-md md:rounded-md`}>
-        <div className={`relative w-full md:rounded-t-md h-24 bg-neutral-900 mt-4 px-8 flex justify-top items-center`}>
+        <div className={`relative w-full md:rounded-t-md h-24 bg-neutral-900 mt-4 px-4 md:px-8 flex justify-top items-center`}>
             <p className={`h-auto flex justify-top items-center text-white text-3xl ${roboto.className}`}>Profile Settings</p>
-            <div onClick={() => checkProfileTrue()} className={`${roboto.className} hover:cursor-pointer hover:bg-opacity-90 absolute right-8 h-14 w-24 rounded-md bg-amber-400 flex justify-center items-center`}>
+            <div onClick={() => checkProfileTrue()} className={`${roboto.className} hover:cursor-pointer hover:bg-opacity-90 absolute right-4 md:right-8 h-14 w-24 rounded-md bg-amber-400 flex justify-center items-center`}>
                 <p className={`${roboto.className} text-xl`}>{ShowProfile ? 'Close' : 'Open'}</p>
             </div>
         </div>
@@ -352,10 +349,10 @@ export default function Dashboard({UserObj, SignOut}) {
     </div>
 
     return(
-        <div className="relative z-30 w-full h-auto bg-neutral-300 bg-opacity-[80%] shadow-md max-w-[100rem] mx-auto pb-10 md:p-6 pt-6">
-            <p className={`text-white text-5xl tracking-[.1rem] bg-neutral-500 md:rounded-md md:border-2 border-neutral-900 shadow-md mb-4 pt-6 pb-5 px-2 ${koulen.className} px-8`}>Welcome, <span className="text-amber-400">{UserObj.first_name}</span></p>
+        <div className="relative z-30 w-full h-auto bg-neutral-300 bg-opacity-[80%] shadow-md max-w-[100rem] mx-auto pb-6 md:pb-10 md:p-6 pt-6">
+            <p className={`text-white text-5xl tracking-[.1rem] bg-neutral-500 md:rounded-md md:border-2 border-neutral-900 shadow-md mb-4 pt-6 pb-5 px-2 ${koulen.className} px-4 md:px-8`}>Welcome, <span className="text-amber-400">{UserObj.first_name}</span></p>
             <div className="bg-neutral-900 w-full overflow-hidden py-6 h-auto md:rounded-md">
-                <p className={`text-white text-3xl px-2 mb-3 px-8 ${roboto.className}`}>Goal: <span className={`text-amber-400 ${roboto.className}`}>{UserObj.personal_goal}</span></p>
+                <p className={`text-white text-3xl px-2 mb-3 px-4 md:px-8 ${roboto.className}`}>Goal: <span className={`text-amber-400 ${roboto.className}`}>{UserObj.personal_goal}</span></p>
                 <div className="flex justify-center items-center py-2 sm:px-6 flex-wrap w-full gap-6">
                     <div className="grow sm:border-[.1rem] px-8 sm:rounded-md border-amber-400 bg-neutral-800 pt-8 h-[18rem]">
                         <p className={`h-2/3 flex justify-center items-center text-white text-[12rem] ${koulen.className}`}>{UserObj.age}</p>
@@ -372,10 +369,11 @@ export default function Dashboard({UserObj, SignOut}) {
                 </div>
             </div>
             <MealPlan />
-            <WorkoutPlan />
             <ProfileDash />
-            <div onClick={SignOut} className={`flex justify-center items-center text-2xl hover:bg-opacity-90 hover:cursor-pointer bg-amber-400 w-full ${roboto.className} p-6 h-20 rounded-md mt-4`}>
-                <p>Sign Out</p>
+            <div className="flex justify-center">
+                <div onClick={SignOut} className={`flex justify-center items-center text-2xl hover:bg-opacity-90 hover:cursor-pointer bg-amber-400 max-w-xs md:max-w-none w-full ${roboto.className} p-6 h-20 rounded-md mt-4`}>
+                    <p>Sign Out</p>
+                </div>
             </div>
         </div>
     )

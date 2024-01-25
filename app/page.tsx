@@ -72,7 +72,7 @@ export default function Home() {
 
   const Header = () =>
   <div className="relative z-50 w-full h-24 bg-amber-400 shadow-lg p-4 flex justify-center items-center">
-    <div className="relative max-w-[100rem] w-full h-full flex items-center">
+    <div className="relative w-full h-full flex items-center">
       <p className={`absolute left-6 md:left-8 pb-1 text-4xl ${koulen.className} text-neutral-800`}>Tiden</p>
       <div className="flex flex-row gap-4 absolute right-4 md:right-8">
         <div onClick={() => setLogInState(1)} className={` ${LogInState === 1 ? 'hidden' : null} mb-1 group transition-all hover:scale-[105%] border-neutral-800 cursor-pointer flex justify-center items-center w-28 h-14 rounded-[4px] bg-neutral-800`}>
